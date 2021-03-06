@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Clean Hands</string>
+    <string name="set_home">Set Home</string>
+    <string name="sensitivity">Sensitivity</string>
+    <string name="notification">Notification</string>
 </resources>
