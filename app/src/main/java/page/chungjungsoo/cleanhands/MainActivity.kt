@@ -102,6 +102,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+            override fun onProviderEnabled(provider: String) {}
+            override fun onProviderDisabled(provider: String) {}
         }
 
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 1f, locationListener)
