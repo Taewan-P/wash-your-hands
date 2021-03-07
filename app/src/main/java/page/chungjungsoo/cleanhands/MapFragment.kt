@@ -27,7 +27,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import kotlinx.android.synthetic.main.activity_map.*
 
 class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
-    var dbHandler : LocationDatabaseHelper? = null
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private var defaultLocation = LatLng(37.57601, 126.97692) //Seoul, Gwanghwamoon
