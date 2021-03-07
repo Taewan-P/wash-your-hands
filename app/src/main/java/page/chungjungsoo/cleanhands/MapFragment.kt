@@ -32,7 +32,10 @@ import kotlinx.android.synthetic.main.activity_map.*
 class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    private val defaultLocation = LatLng(37.57601, 126.97692) //Seoul, Gwanghwamoon
+    var dbHandler : LocationDatabaseHelper? = null
+
+    private var defaultLocation = LatLng(37.57601, 126.97692) //Seoul, Gwanghwamoon
+
     private val locationPermissionGranted = false
     private val lastKnownLocation: Location? = null
     lateinit var locationManager: LocationManager
@@ -56,19 +59,48 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
         val innerMapFragment = innerMap as SupportMapFragment
         innerMapFragment.getMapAsync(this)
 
-        setLocationBtn.setOnClickListener {
+        myLocationBtn.setOnClickListener {
             getLocation()
         }
 
+        setLocationBtn.setOnClickListener {
+            setLocation()
+            Toast.makeText(activity, "Set Home Location.", Toast.LENGTH_SHORT).show()
+        }
 
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
+        dbHandler = this.activity?.let { LocationDatabaseHelper(it) }
+
+
         mMap = googleMap
         val marker = this.defaultLocation
         mMap.addMarker(MarkerOptions().position(marker).title("Home"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(marker))
         mMap.animateCamera(CameraUpdateFactory.zoomTo(16.0F))
+    }
+
+    private fun setLocation() {
+        locationManager = context!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        if ((ContextCompat.checkSelfPermission(
+                        this.context!!,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED)) {
+            ActivityCompat.requestPermissions(
+                    this.activity!!,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    locationPermissionCode
+            )
+        }
+        val location: Location? = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+        Log.d("CURRENT LOCATION", "Lat: ${location!!.latitude}, Lon: ${location.longitude}")
+        mMap.clear()
+        val mark = LatLng(location.latitude, location.longitude)
+        defaultLocation = mark
+        mMap.addMarker((MarkerOptions().position(mark).title("Home")))
+        mMap.moveCamera((CameraUpdateFactory.newLatLng(mark)))
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(18.0F))
     }
 
 
@@ -88,9 +120,10 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
         Log.d("CURRENT LOCATION", "Lat: ${location!!.latitude}, Lon: ${location.longitude}")
         mMap.clear()
         val mark = LatLng(location.latitude, location.longitude)
+        defaultLocation = mark
         mMap.addMarker((MarkerOptions().position(mark).title("Home")))
         mMap.moveCamera((CameraUpdateFactory.newLatLng(mark)))
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(16.0F))
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(18.0F))
     }
 
 
