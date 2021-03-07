@@ -27,6 +27,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val intent = Intent(this, BackGround::class.java)
+        startService(intent)
+      
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.prefFragment, Preference())
