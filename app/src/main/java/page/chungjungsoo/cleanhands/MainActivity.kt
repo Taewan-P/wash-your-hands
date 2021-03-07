@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var locationManager: LocationManager
     private var home = Location("point A")
     private var pos = Location("point B")
+    private var stay = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,26 +79,31 @@ class MainActivity : AppCompatActivity() {
                     pos.latitude = it.latitude
                     pos.longitude = it.longitude
                 }
-                if (pos.distanceTo(home) < sensitivity) {
-                    val channel = NotificationChannel("2", "푸시 알람", NotificationManager.IMPORTANCE_DEFAULT)
+                if (pos.distanceTo(home) > sensitivity) {
+                    if (!stay) {
+                        stay = true
+                        val channel = NotificationChannel("2", "푸시 알람", NotificationManager.IMPORTANCE_DEFAULT)
 
-                    val manager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                    manager.createNotificationChannel(channel)
+                        val manager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                        manager.createNotificationChannel(channel)
 
-                    var title = "You are Home"
-                    var content = "Wash your Hands"
-                    var bitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_baseline_wash_24)
+                        var title = "You are Home"
+                        var content = "Wash your Hands"
+                        var bitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_baseline_wash_24)
 
-                    var builder = NotificationCompat.Builder(applicationContext, "2")
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle(title)
-                        .setContentText(content)
-                        .setAutoCancel(true)
-                        .setLargeIcon(bitmap)
-                        .setShowWhen(true)
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        var builder = NotificationCompat.Builder(applicationContext, "2")
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setContentTitle(title)
+                            .setContentText(content)
+                            .setAutoCancel(true)
+                            .setLargeIcon(bitmap)
+                            .setShowWhen(true)
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
-                    NotificationManagerCompat.from(applicationContext).notify(2,builder.build())
+                        NotificationManagerCompat.from(applicationContext).notify(2,builder.build())
+                    }
+                } else {
+                    stay = false
                 }
             }
 
