@@ -3,6 +3,7 @@ package page.chungjungsoo.cleanhands
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -30,7 +31,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
-    private var myLocationRequest: LocationRequest? = null
     lateinit var locationManager: LocationManager
     private var home = Location("point A")
     private var pos = Location("point B")
@@ -66,20 +66,24 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().replace(R.id.map, mapFragment, mapFragment.javaClass.simpleName).commit()
 
 
-        locationManager = this!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        home.latitude = 0.0
-        home.longitude = 0.0
+        locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
 
         val pref : SharedPreferences = getSharedPreferences("page.chungjungsoo.cleanhands_preferences", MODE_PRIVATE)
         val sensitivity = pref.getInt("sensitivity", 50).toFloat()
+        val lat = pref.getFloat("latitude", 0.0F)
+        val lon = pref.getFloat("longitude", 0.0F)
+
+        home.latitude = lat.toDouble()
+        home.longitude = lon.toDouble()
 
         val locationListener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
-                location?.let {
+                location.let {
                     pos.latitude = it.latitude
                     pos.longitude = it.longitude
                 }
-                if (pos.distanceTo(home) > sensitivity) {
+                if (pos.distanceTo(home) < sensitivity) {
                     if (!stay) {
                         stay = true
                         val channel = NotificationChannel("2", "푸시 알람", NotificationManager.IMPORTANCE_DEFAULT)
@@ -87,20 +91,20 @@ class MainActivity : AppCompatActivity() {
                         val manager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                         manager.createNotificationChannel(channel)
 
-                        var title = "You are Home"
-                        var content = "Wash your Hands"
-                        var bitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_baseline_wash_24)
+                        val title = "You are Home"
+                        val content = "Wash your Hands"
 
-                        var builder = NotificationCompat.Builder(applicationContext, "2")
-                            .setSmallIcon(R.mipmap.ic_launcher)
+                        val builder = NotificationCompat.Builder(applicationContext, "2")
                             .setContentTitle(title)
                             .setContentText(content)
                             .setAutoCancel(true)
-                            .setLargeIcon(bitmap)
+                            .setOngoing(false)
+                            .setSmallIcon(R.drawable.ic_baseline_wash_24)
                             .setShowWhen(true)
+                            .setContentIntent(PendingIntent.getActivity(applicationContext, 0, Intent(), 0))
                             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
-                        NotificationManagerCompat.from(applicationContext).notify(2,builder.build())
+                        NotificationManagerCompat.from(applicationContext).notify(2, builder.build())
                     }
                 } else {
                     stay = false
@@ -117,7 +121,7 @@ class MainActivity : AppCompatActivity() {
 
 
         notiSettingBtn.setOnClickListener {
-            var intent = Intent()
+            val intent = Intent()
             intent.action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
             intent.putExtra("android.provider.extra.APP_PACKAGE", packageName)
             startActivity(intent)
