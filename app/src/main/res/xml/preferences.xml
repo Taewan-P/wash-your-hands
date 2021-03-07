@@ -12,4 +12,14 @@
             android:defaultValue="50"
             app:showSeekBarValue="true"/>
     </PreferenceCategory>
+
+    <Preference
+        android:key="latitude"
+        android:defaultValue="0.0"
+        app:isPreferenceVisible="false" />
+
+    <Preference
+        android:key="longitude"
+        android:defaultValue="0.0"
+        app:isPreferenceVisible="false" />
 </PreferenceScreen>

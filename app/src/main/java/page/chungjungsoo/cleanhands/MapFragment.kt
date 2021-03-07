@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
@@ -15,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
@@ -57,22 +59,34 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
         innerMapFragment.getMapAsync(this)
 
         setLocationBtn.setOnClickListener {
-            getLocation()
+            val myLocation = getLocation()
+            val pref : SharedPreferences = requireContext().getSharedPreferences("page.chungjungsoo.cleanhands_preferences",
+                AppCompatActivity.MODE_PRIVATE
+            )
+            var editor = pref.edit()
+            editor.putFloat("latitude", myLocation.latitude.toFloat())
+            editor.putFloat("longitude", myLocation.longitude.toFloat())
+            editor.apply()
         }
 
 
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
+        val pref : SharedPreferences = requireContext().getSharedPreferences("page.chungjungsoo.cleanhands_preferences",
+            AppCompatActivity.MODE_PRIVATE
+        )
         mMap = googleMap
-        val marker = this.defaultLocation
+        val latitude = pref.getFloat("latitude", 37.57601F)
+        val longitude = pref.getFloat("longitude", 126.97692F)
+        val marker = LatLng(latitude.toDouble(), longitude.toDouble())
         mMap.addMarker(MarkerOptions().position(marker).title("Home"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(marker))
         mMap.animateCamera(CameraUpdateFactory.zoomTo(16.0F))
     }
 
 
-    private fun getLocation() {
+    private fun getLocation() : LatLng {
         locationManager = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
         if ((ContextCompat.checkSelfPermission(
                 this.requireContext(),
@@ -91,6 +105,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
         mMap.addMarker((MarkerOptions().position(mark).title("Home")))
         mMap.moveCamera((CameraUpdateFactory.newLatLng(mark)))
         mMap.animateCamera(CameraUpdateFactory.zoomTo(16.0F))
+
+        return mark
     }
 
 
