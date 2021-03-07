@@ -38,7 +38,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Your Map Code here, Keunmo.
 
         val innerMapFragment = innerMap as SupportMapFragment
         innerMapFragment.getMapAsync(this)
