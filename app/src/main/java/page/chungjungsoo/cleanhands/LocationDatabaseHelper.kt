@@ -20,23 +20,22 @@ class LocationDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NA
         val createTable =
                 "CREATE TABLE $TABLE_NAME" +
                         "($ID INTEGER PRIMARY KEY," +
-                        "$LAT REAL DEFAULT 37.57601," +
-                        "$LNG REAL DEFAULT 126.97692)"
+                        "$LAT REAL," +
+                        "$LNG REAL)"
 
         db?.execSQL(createTable)
     }
 
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) { }
 
-    fun updateLocation(lati: Double, lngi: Double, position: Int = 1) : Boolean {
+    fun updateLocation(lati: Double, lngi: Double) : Boolean {
         // Update to-do in database
         val db = this.writableDatabase
         val values = ContentValues()
 
         values.put(LAT, lati)
         values.put(LNG, lngi)
-
-        val result = db.update(TABLE_NAME, values, "$ID IN(SELECT $ID FROM $TABLE_NAME LIMIT 1 OFFSET $position)", null) > 0
+        val result = db.update(TABLE_NAME, values, null, null) > 0
         db.close()
 
         return result

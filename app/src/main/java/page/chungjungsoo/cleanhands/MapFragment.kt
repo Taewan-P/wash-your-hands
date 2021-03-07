@@ -28,7 +28,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
     var dbHandler : LocationDatabaseHelper? = null
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    private var defaultLocation = LatLng(37.57601, 126.97692) //Seoul, Gwanghwamoon
+//    private var defaultLocation = LatLng(37.57601, 126.97692) //Seoul, Gwanghwamoon
     private val locationPermissionGranted = false
     private val lastKnownLocation: Location? = null
     lateinit var locationManager: LocationManager
@@ -66,7 +66,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
     override fun onMapReady(googleMap: GoogleMap) {
         dbHandler = LocationDatabaseHelper(this.requireContext())
         mMap = googleMap
-//        val marker = this.defaultLocation
         val marker = dbHandler!!.getAll()
         mMap.addMarker(MarkerOptions().position(marker).title("Home"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(marker))
@@ -89,6 +88,10 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
         val location: Location? = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
         Log.d("CURRENT LOCATION", "Lat: ${location!!.latitude}, Lon: ${location.longitude}")
         mMap.clear()
+        val mark = LatLng(location.latitude, location.longitude)
+        mMap.addMarker((MarkerOptions().position(mark).title("Home")))
+        mMap.moveCamera((CameraUpdateFactory.newLatLng(mark)))
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(18.0F))
         dbHandler!!.updateLocation(location.latitude, location.longitude)
     }
 
@@ -109,8 +112,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
         Log.d("CURRENT LOCATION", "Lat: ${location!!.latitude}, Lon: ${location.longitude}")
         mMap.clear()
         val mark = LatLng(location.latitude, location.longitude)
-        defaultLocation = mark
-        mMap.addMarker((MarkerOptions().position(mark).title("Home")))
         mMap.moveCamera((CameraUpdateFactory.newLatLng(mark)))
         mMap.animateCamera(CameraUpdateFactory.zoomTo(18.0F))
     }
