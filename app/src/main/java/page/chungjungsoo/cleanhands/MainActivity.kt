@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         notiSettingBtn.setOnClickListener {
             // TODO: 노티 설정으로 이동 -> 환경절정 - 앱 - 우리앱에 노티설정
             var intent = Intent()
-            intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+            intent.action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
             intent.putExtra("android.provider.extra.APP_PACKAGE", packageName)
             startActivity(intent)
         }
