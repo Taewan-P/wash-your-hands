@@ -4,8 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.location.Location
-import page.chungjungsoo.cleanhands.LocationData
+import com.google.android.gms.maps.model.LatLng
 
 class LocationDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
     companion object {
@@ -21,21 +20,21 @@ class LocationDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NA
         val createTable =
                 "CREATE TABLE $TABLE_NAME" +
                         "($ID INTEGER PRIMARY KEY," +
-                        "$LAT FLOAT DEFAULT 37.57601," +
-                        "$LNG FLOAT DEFAULT 126.97692"
+                        "$LAT REAL DEFAULT 37.57601," +
+                        "$LNG REAL DEFAULT 126.97692)"
 
         db?.execSQL(createTable)
     }
 
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) { }
 
-    fun updateLocation(location: LocationData, position: Int) : Boolean {
+    fun updateLocation(lati: Double, lngi: Double, position: Int = 1) : Boolean {
         // Update to-do in database
         val db = this.writableDatabase
         val values = ContentValues()
 
-        values.put(LAT, location.latitude)
-        values.put(LNG, location.longitude)
+        values.put(LAT, lati)
+        values.put(LNG, lngi)
 
         val result = db.update(TABLE_NAME, values, "$ID IN(SELECT $ID FROM $TABLE_NAME LIMIT 1 OFFSET $position)", null) > 0
         db.close()
@@ -43,28 +42,25 @@ class LocationDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NA
         return result
     }
 
-    fun getAll() : MutableList<LocationData> {
+    fun getAll() : LatLng {
         // Get all data from database and return MutableList for ListView.
-        var locations = mutableListOf<LocationData>()
         val db = readableDatabase
         val selectALLQuery = "SELECT * FROM $TABLE_NAME"
         val cursor = db.rawQuery(selectALLQuery, null)
-        var latitute : Float
-        var longitute : Float
+        var latitute : Double = 37.57601
+        var longitute : Double = 126.97692
 
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 do {
-                    latitute = cursor.getFloat(cursor.getColumnIndex(LAT))
-                    longitute = cursor.getFloat(cursor.getColumnIndex(LNG))
-
-                    locations.add(LocationData(latitute, longitute))
+                    latitute = cursor.getDouble(cursor.getColumnIndex(LAT))
+                    longitute = cursor.getDouble(cursor.getColumnIndex(LNG))
                 } while (cursor.moveToNext())
             }
         }
         cursor.close()
         db.close()
 
-        return locations
+        return LatLng(latitute, longitute)
     }
 }
