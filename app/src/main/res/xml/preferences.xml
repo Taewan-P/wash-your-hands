@@ -5,7 +5,7 @@
     <PreferenceCategory
         android:title="Range Setting">
         <SeekBarPreference
-            android:key="seekbar"
+            android:key="sensitivity"
             android:title="Margin of Error (Unit: Meter)"
             android:max="300"
             android:min="10"
