@@ -44,20 +44,17 @@
 
 
             <Button
-                android:id="@+id/sensitivityBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:text="@string/sensitivity" />
-
-            <Button
                 android:id="@+id/notiSettingBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/notification" />
         </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/prefFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <LinearLayout
             android:id="@+id/linearLayout2"

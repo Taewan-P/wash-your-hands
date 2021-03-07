@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="Range Setting">
+        <SeekBarPreference
+            android:key="seekbar"
+            android:title="Margin of Error (Unit: Meter)"
+            android:max="300"
+            android:min="10"
+            android:defaultValue="50"
+            app:showSeekBarValue="true"/>
+    </PreferenceCategory>
+</PreferenceScreen>
