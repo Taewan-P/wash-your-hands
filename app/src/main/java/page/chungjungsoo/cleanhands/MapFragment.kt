@@ -87,7 +87,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
     }
 
     private fun setLocation() {
-//        dbHandler = LocationDatabaseHelper(this.requireContext())
         locationManager = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
         if ((ContextCompat.checkSelfPermission(
                         this.requireContext(),
@@ -102,7 +101,10 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
         val location: Location? = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
         Log.d("CURRENT LOCATION", "Lat: ${location!!.latitude}, Lon: ${location.longitude}")
         mMap.clear()
-//        dbHandler!!.updateLocation(location.latitude, location.longitude)
+        val mark = LatLng(location.latitude, location.longitude)
+        mMap.addMarker((MarkerOptions().position(mark).title("Home")))
+        mMap.moveCamera((CameraUpdateFactory.newLatLng(mark)))
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(16.0F))
     }
 
 
@@ -123,7 +125,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
         mMap.clear()
         val mark = LatLng(location.latitude, location.longitude)
         defaultLocation = mark
-        mMap.addMarker((MarkerOptions().position(mark).title("Home")))
+//        mMap.addMarker((MarkerOptions().position(mark).title("Home")))
         mMap.moveCamera((CameraUpdateFactory.newLatLng(mark)))
         mMap.animateCamera(CameraUpdateFactory.zoomTo(16.0F))
 
