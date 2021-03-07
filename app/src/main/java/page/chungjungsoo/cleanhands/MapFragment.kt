@@ -124,7 +124,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
         mMap.clear()
         val mark = LatLng(location.latitude, location.longitude)
         defaultLocation = mark
-//        mMap.addMarker((MarkerOptions().position(mark).title("Home")))
+        mMap.addMarker((MarkerOptions().position(mark)))
         mMap.moveCamera((CameraUpdateFactory.newLatLng(mark)))
         mMap.animateCamera(CameraUpdateFactory.zoomTo(16.0F))
 
