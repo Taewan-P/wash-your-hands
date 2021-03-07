@@ -9,6 +9,7 @@
             android:title="Margin of Error (Unit: Meter)"
             android:max="300"
             android:min="10"
-            android:defaultValue="50"/>
+            android:defaultValue="50"
+            app:showSeekBarValue="true"/>
     </PreferenceCategory>
 </PreferenceScreen>

@@ -27,6 +27,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.prefFragment, Preference())
+            .commit()
+
 
         if (ContextCompat.checkSelfPermission(this@MainActivity,
                 Manifest.permission.ACCESS_FINE_LOCATION) !=
@@ -45,10 +50,6 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().replace(R.id.map, mapFragment, mapFragment.javaClass.simpleName).commit()
 
 
-        sensitivityBtn.setOnClickListener { 
-            // TODO: 감도 설정
-
-        }
 
         notiSettingBtn.setOnClickListener {
             var intent = Intent()
@@ -56,8 +57,6 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("android.provider.extra.APP_PACKAGE", packageName)
             startActivity(intent)
         }
-
-
 
     }
 

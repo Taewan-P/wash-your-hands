@@ -38,7 +38,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
     lateinit var locationManager: LocationManager
     private val locationPermissionCode = 2
 
-    fun ViewGroup.inflate(layoutId: Int, attachToRoot: Boolean = false): View {
+    private fun ViewGroup.inflate(layoutId: Int, attachToRoot: Boolean = false): View {
         return LayoutInflater.from(context).inflate(layoutId, this, attachToRoot)
     }
 
@@ -73,13 +73,13 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
 
 
     private fun getLocation() {
-        locationManager = context!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        locationManager = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
         if ((ContextCompat.checkSelfPermission(
-                this.context!!,
+                this.requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED)) {
             ActivityCompat.requestPermissions(
-                this.activity!!,
+                this.requireActivity(),
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 locationPermissionCode
             )
