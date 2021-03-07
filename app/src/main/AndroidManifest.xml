@@ -3,9 +3,9 @@
     package="page.chungjungsoo.cleanhands">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:allowBackup="true"
@@ -14,9 +14,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CleanHands">
+        <service
+            android:name=".BackGround"
+            android:enabled="true"
+            android:exported="true"></service>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${googleMapApiKey}"/>
+            android:value="${googleMapApiKey}" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
