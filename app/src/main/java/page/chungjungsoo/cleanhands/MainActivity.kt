@@ -1,13 +1,16 @@
 package page.chungjungsoo.cleanhands
 
+import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.OnMapReadyCallback
 import kotlinx.android.synthetic.main.activity_main.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 
 
@@ -15,6 +18,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 //class MainActivity : AppCompatActivity(){
 
     private lateinit var mMap: GoogleMap
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private val defaultLocation = LatLng(37.57601, 126.97692) //Seoul, Gwanghwamoon
+    private val locationPermissionGranted = false
+    private val lastKnownLocation: Location? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -39,7 +48,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        val marker = LatLng(37.56, 126.97)
+        val marker = this.defaultLocation
         mMap.addMarker(MarkerOptions().position(marker).title("Home"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(marker))
         mMap.animateCamera(CameraUpdateFactory.zoomTo(16.0F))
