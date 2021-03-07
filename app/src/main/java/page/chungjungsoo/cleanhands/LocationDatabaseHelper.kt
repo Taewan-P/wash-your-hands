@@ -55,8 +55,8 @@ class LocationDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NA
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 do {
-                    latitute = cursor.getString(cursor.getColumnIndex(LAT))
-                    longitute = cursor.getString(cursor.getColumnIndex(LNG))
+                    latitute = cursor.getFloat(cursor.getColumnIndex(LAT))
+                    longitute = cursor.getFloat(cursor.getColumnIndex(LNG))
 
                     locations.add(LocationData(latitute, longitute))
                 } while (cursor.moveToNext())
@@ -65,6 +65,6 @@ class LocationDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NA
         cursor.close()
         db.close()
 
-        return lacations
+        return locations
     }
 }

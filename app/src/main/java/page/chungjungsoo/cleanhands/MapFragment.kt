@@ -32,6 +32,8 @@ import kotlinx.android.synthetic.main.activity_map.*
 class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private lateinit var db: LocationDatabaseHelper
+
     var dbHandler : LocationDatabaseHelper? = null
 
     private var defaultLocation = LatLng(37.57601, 126.97692) //Seoul, Gwanghwamoon
@@ -72,7 +74,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
 
     override fun onMapReady(googleMap: GoogleMap) {
         dbHandler = this.activity?.let { LocationDatabaseHelper(it) }
-
+        var coordinates: MutableList<LocationData> = dbHandler!!.getAll()
+        db = this.context?.let { LocationDatabaseHelper(it) }!!
 
         mMap = googleMap
         val marker = this.defaultLocation
